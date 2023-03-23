@@ -12,10 +12,10 @@
     <title>Bitcoin 1 Million USD Price Tracker | DCryptoTools</title>
 
     <style>
+
         body {
-            background-image: url('https://i.redd.it/zrwt6qk892991.gif');
-            background-repeat: no-repeat;
-        	background-color: black;
+          
+            background-color: black;
             background-position: center;
             color: #b4b6ba;
         }
@@ -26,29 +26,53 @@
             padding: 20px;
             border-radius: 10px;
             display: block;
-            margin-top: 50px;
         }
 
         .progress-container {
             width: 100%;
-    		height: 1rem;
-   			border-radius: inherit;
-    		background-color: #485250;
-    		margin-top: 2rem;
+            height: 1rem;
+            border-radius: inherit;
+            background-color: #485250;
+            margin-top: 2rem;
         }
         
         .progress-bar {
-          	height: 1rem;
-			background-color: #4CAF50;
-			text-align: center;
-			border-radius: inherit;
-			line-height: 0.5rem;
-			color: rgb(255 255 255 / 86%);
-			font-size: 0.8rem;
-			display: flex;
-			align-items: center;
-			justify-content: center;
+            height: 1rem;
+            background-color: #4CAF50;
+            text-align: center;
+            border-radius: inherit;
+            line-height: 0.5rem;
+            color: rgb(255 255 255 / 86%);
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
+
+
+
+#daysRemaining {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 0;
+  margin-left: 1rem;
+}
+
+        .btc-background{
+    background-image: url('https://i.redd.it/zrwt6qk892991.gif');
+      background-repeat: no-repeat;
+      background-position: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 22rem;
+}
+
+   img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
 
     </style>
     <script>
@@ -66,13 +90,18 @@
 
                 const targetPrice = 1000000;
                 const circulatingSupply = 19324356;
+
+        // To calculate BTC bar to reach 1 Million USD:
+        // One approach is to use marketcap and requiredmarketcap by having realtime circulatingSupply data.
+//              const progressPercentage = (currentMarketCap / requiredMarketCap) * 100;
+
+        // Other approach is to use targetPrice and currentPrice data.
                 const requiredMarketCap = targetPrice * circulatingSupply;
+               const progressPercentage = (currentPrice / targetPrice) * 100;
 
-                const progressPercentage = (currentMarketCap / requiredMarketCap) * 100;
-
-                document.getElementById("currentPrice").innerText = `Current Bitcoin price: $${currentPrice.toFixed(2)}`;
-                document.getElementById("currentMarketCap").innerText = `Current market cap: $${currentMarketCap.toFixed(2)}`;
-                document.getElementById("requiredMarketCap").innerText = `Market cap required to make the value of 1 Bitcoin to $1M: $${requiredMarketCap.toFixed(2)}`;
+                document.getElementById("currentPrice").innerText = `Current Bitcoin Price: $${currentPrice.toFixed(2)}`;
+                document.getElementById("currentMarketCap").innerText = `Current Market Cap: $${currentMarketCap.toFixed(2)}`;
+                document.getElementById("requiredMarketCap").innerText = `Approx Market Cap Required for 1 Bitcoin to Reach $1M: $${requiredMarketCap.toFixed(2)}`;
 
                 document.getElementById("progressBar").style.width = `${progressPercentage.toFixed(2)}%`;
                 document.getElementById("progressBar").innerText = `${progressPercentage.toFixed(2)}%`;
@@ -84,28 +113,57 @@
             }
         }
 
+        function calculateDaysBetween(startDate, endDate) {
+          const oneDay = 24 * 60 * 60 * 1000; // hours * minutes * seconds * milliseconds
+          const start = new Date(startDate);
+          const end = new Date(endDate);
+
+          return Math.round(Math.abs((start - end) / oneDay));
+        }
+
+        function updateDaysRemaining() {
+          const currentDate = new Date();
+          const daysRemaining = calculateDaysBetween(currentDate, endDate);
+          document.getElementById("daysRemaining").innerText = `Balaji's Prediction Days Remaining: ${daysRemaining}`;
+        }
+
+        const endDate = '2023-06-16';
+
         document.addEventListener("DOMContentLoaded", () => {
-            fetchBitcoinData();
-            setInterval(fetchBitcoinData, 20000);
+          updateDaysRemaining();
+          setInterval(updateDaysRemaining, 1000);
+          fetchBitcoinData();
+          setInterval(fetchBitcoinData, 20000);
         });
     </script>
+
 </head>
 <body>
     <div class="container">
         <h1>1 Bitcoin = 1 Million USD Price Tracker</h1>
+
+        <div class="btc-background">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/1920px-Bitcoin.svg.png" alt="Bitcoin Logo" width="150">
+        </div>
+        <p id="daysRemaining"></p>
         <p>This page provides information on the current and required market cap for Bitcoin to reach a value of $1 Million USD per BTC.</p>
-        </p>The website refreshes data every 20 seconds.</p> 
-        </p> But CoinGecko free API updates actual price approximately at every 4mins.</p>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/1920px-Bitcoin.svg.png" alt="Bitcoin Logo" width="150">
+        <p id="requiredMarketCap"></p>
         <p id="currentPrice"></p>
         <p id="currentMarketCap"></p>
-        <p id="requiredMarketCap"></p>
-        <p id="refreshCounter"></p>
-        <p>Data Source: CoinGecko </p>
-        <p><a href="https://dcryptotools.com" target="_blank">Supported By: dcryptotools.com</a></p>
-        <p>BTC Donate Address: bc1qepxeygpz3n4l88rlwzrz9h34hswctuz3rzft59 </p>
         <div class="progress-container">
             <div id="progressBar" class="progress-bar"></div>
         </div>
+ 
+        <p id="refreshCounter"></p>
+
+        <p><a href="https://dcryptotools.com" target="_blank">Supported By: dcryptotools.com</a></p>
+        <p>Data Source: CoinGecko </p>
+    </p>Note: The website refreshes data every 20 seconds. But CoinGecko free API updates actual data approximately at every 4mins</p> 
+
+        <p>Thank you for Donating to BTC Address: bc1qepxeygpz3n4l88rlwzrz9h34hswctuz3rzft59 </p>
+        <p>Contact: info@dcryptotools.com </p>
+
 </body>
 </html>  
+
+
